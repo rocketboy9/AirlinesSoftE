@@ -58,7 +58,7 @@ namespace Airlines
             List<FlightModel> flights = null;
             using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
             {
-                    string sqlQuery = $"SELECT * FROM Flights";
+                    string sqlQuery = $"SELECT *, OriginCity || ' - ' || DestinationCity AS Lane FROM Flights";
 
                     flights = cnn.Query<FlightModel>(sqlQuery, new DynamicParameters())?.ToList();
 
@@ -93,6 +93,37 @@ namespace Airlines
                 flight = cnn.Query<FlightModel>(sqlQuery, new DynamicParameters())?.FirstOrDefault();
 
                 return flight;
+            }
+        }
+
+        public List<Ticket> GetPeopleOnFlight(int FlightID)
+        {
+            List<Ticket> PeopleOnFlight = null;
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                string sqlQuery = $"SELECT *, FirstName || ' - ' || LastName AS FullName FROM Tickets WHERE FlightID = {FlightID}";
+
+                PeopleOnFlight = cnn.Query<Ticket>(sqlQuery, new DynamicParameters())?.ToList();
+
+                return PeopleOnFlight;
+            }
+            return null;
+        }
+
+        public void CreateTicket(Ticket ticket)
+        {
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                cnn.Execute("INSERT INTO Tickets(FlightID, UserID, FirstName, LastName, PricePaid, PointsPaid)" +
+                    "VALUES (@FlightID, @UserID, @FirstName, @LastName, @PricePaid, @PointsPaid)", ticket);
+            }
+        }
+
+        public void DeleteTicketsForUser(int UserID)
+        {
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                cnn.Execute($"DELETE FROM Tickets WHERE UserID = {UserID}");
             }
         }
 

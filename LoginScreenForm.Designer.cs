@@ -28,80 +28,81 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBoxId = new System.Windows.Forms.TextBox();
-            this.textBoxPassword = new System.Windows.Forms.TextBox();
-            this.buttonLogin = new System.Windows.Forms.Button();
-            this.buttonCreateNewAccount = new System.Windows.Forms.Button();
-            this.labelAirlines = new System.Windows.Forms.Label();
-            this.SuspendLayout();
+            textBoxId = new TextBox();
+            textBoxPassword = new TextBox();
+            buttonLogin = new Button();
+            buttonCreateNewAccount = new Button();
+            labelAirlines = new Label();
+            SuspendLayout();
             // 
             // textBoxId
             // 
-            this.textBoxId.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.textBoxId.Location = new System.Drawing.Point(161, 80);
-            this.textBoxId.Name = "textBoxId";
-            this.textBoxId.PlaceholderText = "Customer ID";
-            this.textBoxId.Size = new System.Drawing.Size(209, 23);
-            this.textBoxId.TabIndex = 2;
+            textBoxId.Anchor = AnchorStyles.Top;
+            textBoxId.Location = new Point(161, 80);
+            textBoxId.Name = "textBoxId";
+            textBoxId.PlaceholderText = "Customer ID";
+            textBoxId.Size = new Size(209, 23);
+            textBoxId.TabIndex = 2;
+            textBoxId.KeyDown += Login_KeyDown;
             // 
             // textBoxPassword
             // 
-            this.textBoxPassword.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.textBoxPassword.Location = new System.Drawing.Point(161, 128);
-            this.textBoxPassword.Name = "textBoxPassword";
-            this.textBoxPassword.PlaceholderText = "Password";
-            this.textBoxPassword.Size = new System.Drawing.Size(209, 23);
-            this.textBoxPassword.TabIndex = 3;
+            textBoxPassword.Anchor = AnchorStyles.Top;
+            textBoxPassword.Location = new Point(161, 128);
+            textBoxPassword.Name = "textBoxPassword";
+            textBoxPassword.PlaceholderText = "Password";
+            textBoxPassword.Size = new Size(209, 23);
+            textBoxPassword.TabIndex = 3;
+            textBoxPassword.KeyDown += Login_KeyDown;
             // 
             // buttonLogin
             // 
-            this.buttonLogin.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.buttonLogin.Location = new System.Drawing.Point(204, 190);
-            this.buttonLogin.Name = "buttonLogin";
-            this.buttonLogin.Size = new System.Drawing.Size(109, 23);
-            this.buttonLogin.TabIndex = 0;
-            this.buttonLogin.Text = "Login";
-            this.buttonLogin.UseVisualStyleBackColor = true;
-            this.buttonLogin.Click += new System.EventHandler(this.buttonLogin_Click);
+            buttonLogin.Anchor = AnchorStyles.Top;
+            buttonLogin.Location = new Point(204, 190);
+            buttonLogin.Name = "buttonLogin";
+            buttonLogin.Size = new Size(109, 23);
+            buttonLogin.TabIndex = 0;
+            buttonLogin.Text = "Login";
+            buttonLogin.UseVisualStyleBackColor = true;
+            buttonLogin.Click += buttonLogin_Click;
             // 
             // buttonCreateNewAccount
             // 
-            this.buttonCreateNewAccount.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.buttonCreateNewAccount.Location = new System.Drawing.Point(178, 236);
-            this.buttonCreateNewAccount.Name = "buttonCreateNewAccount";
-            this.buttonCreateNewAccount.Size = new System.Drawing.Size(166, 23);
-            this.buttonCreateNewAccount.TabIndex = 4;
-            this.buttonCreateNewAccount.Text = "Create new Account";
-            this.buttonCreateNewAccount.UseVisualStyleBackColor = true;
-            this.buttonCreateNewAccount.Click += new System.EventHandler(this.buttonCreateNewAccount_Click);
+            buttonCreateNewAccount.Anchor = AnchorStyles.Top;
+            buttonCreateNewAccount.Location = new Point(178, 236);
+            buttonCreateNewAccount.Name = "buttonCreateNewAccount";
+            buttonCreateNewAccount.Size = new Size(166, 23);
+            buttonCreateNewAccount.TabIndex = 4;
+            buttonCreateNewAccount.Text = "Create new Account";
+            buttonCreateNewAccount.UseVisualStyleBackColor = true;
+            buttonCreateNewAccount.Click += buttonCreateNewAccount_Click;
             // 
             // labelAirlines
             // 
-            this.labelAirlines.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.labelAirlines.AutoSize = true;
-            this.labelAirlines.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.labelAirlines.Location = new System.Drawing.Point(161, 21);
-            this.labelAirlines.Name = "labelAirlines";
-            this.labelAirlines.Size = new System.Drawing.Size(194, 30);
-            this.labelAirlines.TabIndex = 1;
-            this.labelAirlines.Text = "Something Airlines";
-            this.labelAirlines.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            labelAirlines.Anchor = AnchorStyles.Top;
+            labelAirlines.AutoSize = true;
+            labelAirlines.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
+            labelAirlines.Location = new Point(161, 21);
+            labelAirlines.Name = "labelAirlines";
+            labelAirlines.Size = new Size(194, 30);
+            labelAirlines.TabIndex = 1;
+            labelAirlines.Text = "Something Airlines";
+            labelAirlines.TextAlign = ContentAlignment.TopCenter;
             // 
-            // LoginScreen
+            // LoginScreenForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(534, 335);
-            this.Controls.Add(this.labelAirlines);
-            this.Controls.Add(this.buttonCreateNewAccount);
-            this.Controls.Add(this.buttonLogin);
-            this.Controls.Add(this.textBoxPassword);
-            this.Controls.Add(this.textBoxId);
-            this.Name = "LoginScreen";
-            this.Text = "Login";
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(534, 335);
+            Controls.Add(labelAirlines);
+            Controls.Add(buttonCreateNewAccount);
+            Controls.Add(buttonLogin);
+            Controls.Add(textBoxPassword);
+            Controls.Add(textBoxId);
+            Name = "LoginScreenForm";
+            Text = "Login";
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion

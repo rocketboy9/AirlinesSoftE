@@ -172,6 +172,21 @@ namespace Airlines
                 buttonAcceptFlight.Text = "Cancel Flight";
 
                 svc.UpdateCustomerFlight(Customer.Id, RecommendedFlight.FlightID);
+
+                Ticket ticket = new Ticket()
+                {
+                    FirstName = Customer.FirstName,
+                    LastName = Customer.LastName,
+                    FlightID = RecommendedFlight.FlightID,
+                    UserID = Customer.Id,
+                    PointsPaid = 0,//Need to Update the PricePaid and the PointsPaid at some point
+                    PricePaid = 0   //Need to update the PricePaid and the PointsPaid at some point
+                };
+
+                //Also need to create another ticket if there is a return flight
+
+                svc.CreateTicket(ticket);
+
             }
             else if(buttonAcceptFlight.Text == "Cancel Flight")
             {
@@ -180,6 +195,8 @@ namespace Airlines
                 buttonAcceptFlight.Text = "Pay and Resrve seat for flight";
                 richTextBoxFlightInformation.Visible = false;
                 svc.UpdateCustomerFlight(Customer.Id);
+
+                svc.DeleteTicketsForUser(Customer.Id);
 
                 RecommendedFlight = null;
 

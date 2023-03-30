@@ -14,6 +14,11 @@ namespace Airlines
 
         private void buttonLogin_Click(object sender, EventArgs e)
         {
+            Login();
+        }
+
+        private void Login()
+        {
             if (!AllTextBoxesFilled())
                 return;
 
@@ -39,9 +44,31 @@ namespace Airlines
 
             if (customer.Password.Equals(ConvertToHash(textBoxPassword.Text)))//if passwords match then open the MainForm
             {
-                MainForm mainform = new MainForm(customer);
-                mainform.ShowDialog();
-                this.Close();
+                if (customer.FlightManager == true)
+                {
+                    FlightManagerForm flight = new FlightManagerForm();
+                    flight.ShowDialog();
+                    this.Close();
+                }
+                else if (customer.Accountant == true)
+                {
+                    //open accountantForm
+                }
+                else if (customer.LoadEngineer == true)
+                {
+                    //open LoadEngineerForm
+                }
+                else if (customer.MarketingManager == true)
+                {
+                    //open MarketingManagerForm
+                }
+                else
+                {
+                    MainForm mainform = new MainForm(customer);
+                    mainform.ShowDialog();
+                    this.Close();
+                }
+
             }
             else
             {
@@ -54,8 +81,8 @@ namespace Airlines
         //Opens NewAccountForm if buttonCreateNewAccount is pressed
         private void buttonCreateNewAccount_Click(object sender, EventArgs e)
         {
-                NewAccountForm newAccountForm = new NewAccountForm();
-                newAccountForm.ShowDialog();
+            NewAccountForm newAccountForm = new NewAccountForm();
+            newAccountForm.ShowDialog();
         }
 
 
@@ -95,6 +122,14 @@ namespace Airlines
             }
 
             return hash;
+        }
+
+        private void Login_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                Login();
+            }
         }
     }
 }

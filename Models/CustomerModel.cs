@@ -8,6 +8,18 @@ using GeoCoordinatePortable;
 
 namespace Airlines.Models
 {
+
+    public class Ticket
+    {
+        public int TicketID { get; set; }
+        public int FlightID { get; set; }
+        public int UserID { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public int PricePaid { get; set; }
+        public int PointsPaid { get; set; }
+        public string FullName { get; set; }
+    }
     public class CustomerModel
     {
         public int Id { get; set; }
@@ -21,6 +33,10 @@ namespace Airlines.Models
         public string Password { get; set; }
         public string CreditCard { get; set; }
         public int FlightID { get; set; }
+        public bool FlightManager { get; set; }
+        public bool LoadEngineer { get; set; }
+        public bool Accountant { get; set; }
+        public bool MarketingManager { get; set; }
     }
 
     public class FlightModel
@@ -49,6 +65,8 @@ namespace Airlines.Models
         public string OriginCity { get; set; }
         public string DestinationCity { get; set; }
         public DateTime TakeoffTime { get; set; }
+        public string Lane { get; set; }
+    
         public int getDistance()
         {
             CitiesList citiesList = new CitiesList();
