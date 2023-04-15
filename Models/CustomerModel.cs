@@ -16,7 +16,7 @@ namespace Airlines.Models
         public int UserID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public int PricePaid { get; set; }
+        public double PricePaid { get; set; }
         public int PointsPaid { get; set; }
         public string FullName { get; set; }
     }
@@ -74,6 +74,29 @@ namespace Airlines.Models
             City Destination = citiesList.cities.Where(s => string.Equals(s.name, DestinationCity)).FirstOrDefault();
 
             return citiesList.GetDistanceBetweenCities(origin, Destination); 
+        }
+
+        public double getPrice()
+        {
+            double price = 0;
+            double fixedPrice = 50;
+            double TSAperSegment = 8;
+
+            int distanceInMiles = getDistance();
+            double distancePrice = .12 * distanceInMiles;
+
+            //red eye discount
+            if (TakeoffTime.Hour < 5 || TakeoffTime.AddHours(distanceInMiles / 500).Hour < 5)//if leaving or arriving before 5 am then 20% red-eye discount
+            {
+                distancePrice = distancePrice * .80;
+            }
+            else if(TakeoffTime.Hour<8 || TakeoffTime.AddHours(distanceInMiles / 500).Hour > 19)//if leaving before 8 or arriving after 7 pm gets 10% discount 
+            {
+                distancePrice = distancePrice * .90;
+
+            }
+
+            return distancePrice;
         }
     }
 

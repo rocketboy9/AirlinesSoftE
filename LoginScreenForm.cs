@@ -46,7 +46,7 @@ namespace Airlines
             {
                 if (customer.FlightManager == true)
                 {
-                    FlightManagerForm flight = new FlightManagerForm();
+                    FlightsListForm flight = new FlightsListForm(true, false, false);
                     flight.ShowDialog();
                     this.Close();
                 }
@@ -56,14 +56,21 @@ namespace Airlines
                 }
                 else if (customer.LoadEngineer == true)
                 {
-                    //open LoadEngineerForm
+                    //open Flights List Form
+                    FlightsListForm flights = new FlightsListForm(false, true, false);
+                    flights.ShowDialog();
+                    this.Close();
                 }
                 else if (customer.MarketingManager == true)
                 {
-                    //open MarketingManagerForm
+                    //open Flights List Form
+                    FlightsListForm flights = new FlightsListForm(false, false, true);
+                    flights.ShowDialog();
+                    this.Close();
                 }
                 else
                 {
+                    //open the customer/Main Form if they don't have any roles
                     MainForm mainform = new MainForm(customer);
                     mainform.ShowDialog();
                     this.Close();

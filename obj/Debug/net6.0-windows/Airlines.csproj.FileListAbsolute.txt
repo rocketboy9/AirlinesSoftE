@@ -26,5 +26,7 @@ C:\Users\diett\source\repos\Airlines\obj\Debug\net6.0-windows\refint\Airlines.dl
 C:\Users\diett\source\repos\Airlines\obj\Debug\net6.0-windows\Airlines.pdb
 C:\Users\diett\source\repos\Airlines\obj\Debug\net6.0-windows\Airlines.genruntimeconfig.cache
 C:\Users\diett\source\repos\Airlines\obj\Debug\net6.0-windows\ref\Airlines.dll
-C:\Users\diett\source\repos\Airlines\obj\Debug\net6.0-windows\Airlines.FlightManagerForm.resources
 C:\Users\diett\source\repos\Airlines\obj\Debug\net6.0-windows\Airlines.FlightManagerManifestForm.resources
+C:\Users\diett\source\repos\Airlines\obj\Debug\net6.0-windows\Airlines.AccountHistoryForm.resources
+C:\Users\diett\source\repos\Airlines\obj\Debug\net6.0-windows\Airlines.LoadEngineerForm.resources
+C:\Users\diett\source\repos\Airlines\obj\Debug\net6.0-windows\Airlines.FlightsListForm.resources

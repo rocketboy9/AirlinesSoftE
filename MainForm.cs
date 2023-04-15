@@ -15,8 +15,16 @@ namespace Airlines
     {
         CustomerModel Customer;
         FlightModel RecommendedFlight;
+        FlightModel RecommendedReturnFlight;
         FlightModel CurrentFlight;
-       
+
+        List<FlightModel> ConnectedInitialFlights;
+        List<FlightModel> ConnectedReturnFlights;
+
+        bool IsConnectedInitialFlight = false;
+        bool IsConnectedReturnFlight = false;
+        bool returnFlight = false;
+
         public MainForm(CustomerModel customer)
         {
             InitializeComponent();
@@ -65,7 +73,7 @@ namespace Airlines
         {
             if (IsError())//checks for errors with what the user types in the boxes before creating a flight
                 return;
-            
+
             CheckFlights();
         }
 
@@ -73,7 +81,7 @@ namespace Airlines
 
         private void SetupRichTextBoxAndButton(FlightModel flight)
         {
-            
+
             int distance = flight.getDistance();
 
             richTextBoxFlightInformation.Text =
@@ -90,22 +98,101 @@ namespace Airlines
 
         private void CheckFlights()//checks to see if there are any relevant flights in the interest of the customer
         {
+            if (checkBoxRoundTrip.Checked)
+            {
+                returnFlight = true;
+            }
+
             SqliteDataService svc = new SqliteDataService();
             List<FlightModel> flights = svc.GetFlights();
 
             FlightModel recomendedFlight = GetRecommendedFlights(flights);
 
+
+
             if (recomendedFlight != null)
             {
                 RecommendedFlight = recomendedFlight;
+
+                if (returnFlight == true)
+                {
+                    GetReturnFlight(flights);
+                    GetReturnFlight(flights);
+                }
+
                 SetupRichTextBoxAndButton(recomendedFlight);
             }
-
             else
             {
+
+                List<FlightModel> connectedFlights = GetConnectedFlights(flights, textBoxOrigin.Text, textBoxDestination.Text, dateTimePickerInitialFlight.Value.Date);
+                if (connectedFlights != null)
+                {
+                    ConnectedInitialFlights = connectedFlights;
+                    IsConnectedInitialFlight = true;
+                }
+                //add functionality to search for possibility of 2 legged flight
                 richTextBoxFlightInformation.Visible = true;
                 richTextBoxFlightInformation.Text = "No relevant Flights\n Sorry :(";
             }
+        }
+
+        private void GetReturnFlight(List<FlightModel> flights)
+        {
+
+            FlightModel returnFlight = flights.Where(s => string.Equals(s.DestinationCity, textBoxOrigin.Text) && string.Equals(s.OriginCity, textBoxDestination.Text) &&
+                                                        (s.TakeoffTime > RecommendedFlight.TakeoffTime && s.TakeoffTime.Day == dateTimePickerReturnFlight.Value.Day)).FirstOrDefault();
+
+            if (returnFlight != null)
+            {
+                RecommendedReturnFlight = returnFlight;
+            }
+
+            if (returnFlight == null)//Get connected return flights if a single return flight doesn't work
+            {
+                List<FlightModel> ConnectedFlights = GetConnectedFlights(flights, textBoxDestination.Text, textBoxOrigin.Text, dateTimePickerReturnFlight.Value);
+
+                if (ConnectedFlights != null)
+                {
+                    ConnectedReturnFlights = ConnectedFlights;
+                    IsConnectedReturnFlight = true;
+                }
+
+            }
+            else//a single and a connected route flights could not be found so make recommendedInitialReturnFlight null
+            {
+                ConnectedReturnFlights = null;
+            }
+
+        }
+
+        private List<FlightModel> GetConnectedFlights(List<FlightModel> flights, string Origin, string Destination, DateTime dateOfFlight)//test this asdfasdfasdf
+        {
+            List<FlightModel> ConnectedFlights = null;
+
+            FlightModel secondFlight = null;
+
+            FlightModel firstFlight = flights.Where(s => s.TakeoffTime.Day == dateOfFlight.Day && string.Equals(Origin, s.OriginCity)).FirstOrDefault();//if its the same day as the return flight is requested and it starts at the same origin city
+            if (firstFlight != null)
+            {
+                secondFlight = flights.Where(s => (s.TakeoffTime > firstFlight.TakeoffTime.AddHours(3) && s.TakeoffTime < firstFlight.TakeoffTime.AddHours(9)) && firstFlight.DestinationCity == s.OriginCity &&
+                                                   string.Equals(Destination, s.DestinationCity)).FirstOrDefault();//if the flight is within 3-9 hours of the first one and the first flights destination is the same as this flights origin and the destination is the same as the main destination
+
+            }
+
+            if (firstFlight == null || secondFlight == null)
+            {
+                return null;
+            }
+            else
+            {
+                ConnectedFlights.Add(firstFlight);
+                ConnectedFlights.Add(secondFlight);
+
+                return ConnectedFlights;
+            }
+
+
         }
 
         private FlightModel GetRecommendedFlights(List<FlightModel> flights)
@@ -124,14 +211,16 @@ namespace Airlines
                 if (flight != null)
                     return flight;
                 else if (flight == null)
-                    return result.FirstOrDefault();//asdf
+                    return result.FirstOrDefault();//get a flight that has the same origin and destination but might not be in the timeframe they desire
             }
 
-            return null;
+            return null;//return null if no flights are available
         }
 
         private bool IsError()
         {
+
+            CitiesList citiesList = new CitiesList();
             bool isError = false;
 
             var lightRed = "#ffcccb";
@@ -146,8 +235,8 @@ namespace Airlines
             }
             else if (dateTimePickerReturnFlight.Checked)//Checks that return flight is greater than the initial flight by two days
             {
-                if (dateTimePickerInitialFlight.Value > DateTime.Now.AddDays(180) || 
-                    dateTimePickerInitialFlight.Value.AddDays(1) < DateTime.Now || 
+                if (dateTimePickerInitialFlight.Value > DateTime.Now.AddDays(180) ||
+                    dateTimePickerInitialFlight.Value.AddDays(1) < DateTime.Now ||
                     dateTimePickerReturnFlight.Value < dateTimePickerInitialFlight.Value.AddDays(2))
                 {
                     isError = true;
@@ -155,6 +244,15 @@ namespace Airlines
                     dateTimePickerReturnFlight.BackColor = ColorTranslator.FromHtml(lightRed);
 
                 }
+            }
+            var originCheck = citiesList.cities.Where(s => s.name == textBoxOrigin.Text)?.FirstOrDefault();
+            var destinationCheck = citiesList.cities.Where(s => s.name == textBoxDestination.Text)?.FirstOrDefault();
+
+            if (originCheck == null || destinationCheck == null)
+            {
+                textBoxOrigin.BackColor = ColorTranslator.FromHtml(lightRed);
+                textBoxDestination.BackColor = ColorTranslator.FromHtml(lightRed);
+                isError = true;
             }
 
             //Add in some error checks when we chose the 10 cities and make sure there are valid cities in the text boxes
@@ -171,27 +269,36 @@ namespace Airlines
                 richTextBoxFlightInformation.Text = "Current Flight: \n" + richTextBoxFlightInformation.Text;
                 buttonAcceptFlight.Text = "Cancel Flight";
 
-                svc.UpdateCustomerFlight(Customer.Id, RecommendedFlight.FlightID);
-
-                Ticket ticket = new Ticket()
+                if (!IsConnectedInitialFlight)
                 {
-                    FirstName = Customer.FirstName,
-                    LastName = Customer.LastName,
-                    FlightID = RecommendedFlight.FlightID,
-                    UserID = Customer.Id,
-                    PointsPaid = 0,//Need to Update the PricePaid and the PointsPaid at some point
-                    PricePaid = 0   //Need to update the PricePaid and the PointsPaid at some point
-                };
+                    BookFlight(RecommendedFlight.FlightID);
+                }
+                else if (IsConnectedInitialFlight)
+                {
+                    BookFlight(ConnectedInitialFlights[0].FlightID);//test these to make sure that they are able to work
+                    BookFlight(ConnectedReturnFlights[1].FlightID);
+                }
 
-                //Also need to create another ticket if there is a return flight
+                if (checkBoxRoundTrip.Checked)
+                {
+                    if (!IsConnectedReturnFlight)
+                    {
+                        BookFlight(RecommendedReturnFlight.FlightID);
+                    }
+                    else if (IsConnectedReturnFlight)
+                    {
+                        BookFlight(ConnectedReturnFlights[0].FlightID);
+                        BookFlight(ConnectedReturnFlights[1].FlightID);
+                    }
+                }
 
-                svc.CreateTicket(ticket);
 
             }
-            else if(buttonAcceptFlight.Text == "Cancel Flight")
+            else if (buttonAcceptFlight.Text == "Cancel Flight")
             {
                 //Insert code here to take the customer off the flight and give them credit or point refund
                 buttonAcceptFlight.Visible = false;
+                buttonUsePoints.Visible = false;
                 buttonAcceptFlight.Text = "Pay and Resrve seat for flight";
                 richTextBoxFlightInformation.Visible = false;
                 svc.UpdateCustomerFlight(Customer.Id);
@@ -201,6 +308,37 @@ namespace Airlines
                 RecommendedFlight = null;
 
             }
+        }
+
+        private void BookFlight(int FlightID)
+        {
+            SqliteDataService svc = new SqliteDataService();
+
+            svc.UpdateCustomerFlight(Customer.Id, FlightID);
+
+            double price = RecommendedFlight.getPrice();
+
+            Ticket ticket = new Ticket()
+            {
+                FirstName = Customer.FirstName,
+                LastName = Customer.LastName,
+                FlightID = RecommendedFlight.FlightID,
+                UserID = Customer.Id,
+                PointsPaid = 0,//Need to Update the PricePaid and the PointsPaid at some point
+                PricePaid = RecommendedFlight.getPrice()   //Need to update the PricePaid and the PointsPaid at some point
+            };
+
+            //Also need to create another ticket if there is a return flight
+
+            svc.CreateTicket(ticket);
+        }
+
+        private void buttonAccountHistory_Click(object sender, EventArgs e)
+        {
+            AccountHistoryForm form = new AccountHistoryForm();
+            form.ShowDialog();
+
+
         }
     }
 }

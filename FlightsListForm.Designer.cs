@@ -1,6 +1,6 @@
 ﻿namespace Airlines
 {
-    partial class FlightManagerForm
+    partial class FlightsListForm
     {
         /// <summary>
         /// Required designer variable.

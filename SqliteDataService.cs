@@ -8,6 +8,7 @@ using System.Configuration;
 using System.Data;
 using System.Data.SQLite;
 using Dapper;
+using Microsoft.VisualBasic.ApplicationServices;
 
 namespace Airlines
 {
@@ -125,6 +126,18 @@ namespace Airlines
             {
                 cnn.Execute($"DELETE FROM Tickets WHERE UserID = {UserID}");
             }
+        }
+
+        public void UpdateFlight(FlightModel flight)
+        {
+            string flightTime = flight.TakeoffTime.ToString();
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                cnn.Execute($"UPDATE Flights " +
+                            $"SET OriginCity = '{flight.OriginCity}', DestinationCity = '{flight.DestinationCity}', TakeOffTime = '{flightTime}' " +
+                            $"WHERE FlightID = {flight.FlightID}");
+            }
+
         }
 
         //Connection string that has a path to the database
