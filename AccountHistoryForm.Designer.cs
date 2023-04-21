@@ -87,22 +87,23 @@
             // 
             // textBoxPointsUsed
             // 
+            textBoxPointsUsed.Enabled = false;
             textBoxPointsUsed.Location = new Point(317, 10);
             textBoxPointsUsed.Name = "textBoxPointsUsed";
-            textBoxPointsUsed.ReadOnly = true;
             textBoxPointsUsed.Size = new Size(100, 23);
             textBoxPointsUsed.TabIndex = 5;
             // 
             // textBoxPointsAvailable
             // 
+            textBoxPointsAvailable.Enabled = false;
             textBoxPointsAvailable.Location = new Point(317, 51);
             textBoxPointsAvailable.Name = "textBoxPointsAvailable";
-            textBoxPointsAvailable.ReadOnly = true;
             textBoxPointsAvailable.Size = new Size(100, 23);
             textBoxPointsAvailable.TabIndex = 6;
             // 
             // richTextBoxFlightsTaken
             // 
+            richTextBoxFlightsTaken.Enabled = false;
             richTextBoxFlightsTaken.Location = new Point(103, 125);
             richTextBoxFlightsTaken.Name = "richTextBoxFlightsTaken";
             richTextBoxFlightsTaken.Size = new Size(156, 280);
@@ -111,6 +112,7 @@
             // 
             // richTextBoxFlightsBooked
             // 
+            richTextBoxFlightsBooked.Enabled = false;
             richTextBoxFlightsBooked.Location = new Point(317, 125);
             richTextBoxFlightsBooked.Name = "richTextBoxFlightsBooked";
             richTextBoxFlightsBooked.Size = new Size(156, 280);
@@ -119,6 +121,7 @@
             // 
             // richTextBoxFlightsCancelled
             // 
+            richTextBoxFlightsCancelled.Enabled = false;
             richTextBoxFlightsCancelled.Location = new Point(540, 125);
             richTextBoxFlightsCancelled.Name = "richTextBoxFlightsCancelled";
             richTextBoxFlightsCancelled.Size = new Size(156, 280);

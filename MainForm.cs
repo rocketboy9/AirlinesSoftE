@@ -186,8 +186,8 @@ namespace Airlines
             }
             else
             {
-                ConnectedFlights.Add(firstFlight);
-                ConnectedFlights.Add(secondFlight);
+                ConnectedFlights?.Add(firstFlight);
+                ConnectedFlights?.Add(secondFlight);
 
                 return ConnectedFlights;
             }
@@ -271,24 +271,25 @@ namespace Airlines
 
                 if (!IsConnectedInitialFlight)
                 {
-                    BookFlight(RecommendedFlight.FlightID);
+                    BookFlightAndCreateFinancialTransactionRecord(RecommendedFlight);
+
                 }
                 else if (IsConnectedInitialFlight)
                 {
-                    BookFlight(ConnectedInitialFlights[0].FlightID);//test these to make sure that they are able to work
-                    BookFlight(ConnectedReturnFlights[1].FlightID);
+                    BookFlightAndCreateFinancialTransactionRecord(ConnectedInitialFlights[0]);//test these to make sure that they are able to work
+                    BookFlightAndCreateFinancialTransactionRecord(ConnectedReturnFlights[1]);
                 }
 
                 if (checkBoxRoundTrip.Checked)
                 {
                     if (!IsConnectedReturnFlight)
                     {
-                        BookFlight(RecommendedReturnFlight.FlightID);
+                        BookFlightAndCreateFinancialTransactionRecord(RecommendedReturnFlight);
                     }
                     else if (IsConnectedReturnFlight)
                     {
-                        BookFlight(ConnectedReturnFlights[0].FlightID);
-                        BookFlight(ConnectedReturnFlights[1].FlightID);
+                        BookFlightAndCreateFinancialTransactionRecord(ConnectedReturnFlights[0]);
+                        BookFlightAndCreateFinancialTransactionRecord(ConnectedReturnFlights[1]);
                     }
                 }
 
@@ -303,18 +304,39 @@ namespace Airlines
                 richTextBoxFlightInformation.Visible = false;
                 svc.UpdateCustomerFlight(Customer.Id);
 
+                List<Ticket> userTickets = svc.GetUserTickets(Customer.Id);
+
+                foreach (Ticket ticket in userTickets)
+                {
+                    FinancialTransactions ft = new FinancialTransactions()
+                    {
+                        UserID = Customer.Id,
+                        FlightID = ticket.FlightID,
+                        MoneyAmount = ticket.PricePaid,
+                        PointsAmount = 0,
+                        CustomerPaid = false,//false means that the customer is recieving a refund for their flight
+                        TransactionDateTime = DateTime.Now,
+                        FirstName = Customer.FirstName,
+                        LastName = Customer.LastName,
+                        CreditCardNumber = Customer.CreditCard
+                    };
+                    svc.CreateFinancialTransaction(ft);
+                }
+
                 svc.DeleteTicketsForUser(Customer.Id);
+
+                //CreateFinancialTransactionForRefund();
 
                 RecommendedFlight = null;
 
             }
         }
 
-        private void BookFlight(int FlightID)
+        private void BookFlightAndCreateFinancialTransactionRecord(FlightModel flight)
         {
             SqliteDataService svc = new SqliteDataService();
 
-            svc.UpdateCustomerFlight(Customer.Id, FlightID);
+            svc.UpdateCustomerFlight(Customer.Id, flight.FlightID);//attaches a flight to the customer so we know they are on the flight, acts as a bool
 
             double price = RecommendedFlight.getPrice();
 
@@ -322,20 +344,33 @@ namespace Airlines
             {
                 FirstName = Customer.FirstName,
                 LastName = Customer.LastName,
-                FlightID = RecommendedFlight.FlightID,
+                FlightID = flight.FlightID,
                 UserID = Customer.Id,
                 PointsPaid = 0,//Need to Update the PricePaid and the PointsPaid at some point
-                PricePaid = RecommendedFlight.getPrice()   //Need to update the PricePaid and the PointsPaid at some point
+                PricePaid = flight.getPrice()   //Need to update the PricePaid and the PointsPaid at some point
             };
-
-            //Also need to create another ticket if there is a return flight
-
             svc.CreateTicket(ticket);
+
+
+            FinancialTransactions ft = new FinancialTransactions()
+            {
+                UserID = Customer.Id,
+                FlightID = flight.FlightID,
+                MoneyAmount = flight.getPrice(),
+                PointsAmount = 0,
+                CustomerPaid = true,
+                TransactionDateTime = DateTime.Now,
+                FirstName = Customer.FirstName,
+                LastName = Customer.LastName,
+                CreditCardNumber = Customer.CreditCard
+            };
+            svc.CreateFinancialTransaction(ft);
+
         }
 
         private void buttonAccountHistory_Click(object sender, EventArgs e)
         {
-            AccountHistoryForm form = new AccountHistoryForm();
+            AccountHistoryForm form = new AccountHistoryForm(Customer);
             form.ShowDialog();
 
 

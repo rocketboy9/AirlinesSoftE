@@ -12,6 +12,9 @@ using Microsoft.VisualBasic.ApplicationServices;
 
 namespace Airlines
 {
+
+    //This class holds all the sql statements that updates inserts deletes data from the sqlite database
+    //This class is the bridge between the UI and the Database
     public class SqliteDataService
     {
         //returns a customerModel object from the database by matching the id number using a sql query
@@ -137,8 +140,46 @@ namespace Airlines
                             $"SET OriginCity = '{flight.OriginCity}', DestinationCity = '{flight.DestinationCity}', TakeOffTime = '{flightTime}' " +
                             $"WHERE FlightID = {flight.FlightID}");
             }
-
         }
+
+        public void CreateFinancialTransaction(FinancialTransactions ft)
+        {
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                cnn.Execute("INSERT INTO FinancialTransactions(FlightID, UserID, FirstName, LastName, MoneyAmount, PointsAmount, CustomerPaid, TransactionDateTime, CreditCardNumber)" +
+                    "VALUES (@FlightID, @UserID, @FirstName, @LastName, @MoneyAmount, @PointsAmount, @CustomerPaid, @TransactionDateTime, @CreditCardNumber)", ft);
+            }
+        }
+
+        public List<Ticket> GetUserTickets(int userID)//returns the tickets so it knows how many to refund
+        {
+            List<Ticket> ticketsForCustomer = null;
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                string sqlQuery = $"SELECT *, FirstName || ' - ' || LastName AS FullName FROM Tickets WHERE UserID = {userID}";
+
+                ticketsForCustomer = cnn.Query<Ticket>(sqlQuery, new DynamicParameters())?.ToList();
+
+                return ticketsForCustomer;
+            }
+            return null;
+        }
+
+        public List<FinancialTransactions> GetFinancialTransactions(int userID)//returns the tickets so it knows how many to refund
+        {
+            List<FinancialTransactions> financialTransactionsForCustomer = null;
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                string sqlQuery = $"SELECT * FROM FinancialTransactions WHERE UserID = {userID}";
+
+                financialTransactionsForCustomer = cnn.Query<FinancialTransactions>(sqlQuery, new DynamicParameters())?.ToList();
+
+                return financialTransactionsForCustomer;
+            }
+            return null;
+        }
+
+
 
         //Connection string that has a path to the database
         private string LoadConnectionString(string id = "Default")

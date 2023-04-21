@@ -144,4 +144,18 @@ namespace Airlines.Models
             return distance;
         }
     }
+
+    public class FinancialTransactions
+    {
+        public int FinancialRecordID { get; set; }
+        public int UserID { get; set; }
+        public int FlightID { get; set; }
+        public double MoneyAmount { get; set; }
+        public int PointsAmount { get; set; }
+        public bool CustomerPaid { get; set; }
+        public DateTime TransactionDateTime { get; set; }
+        public string FirstName{ get; set; }
+        public string LastName { get; set; }
+        public string CreditCardNumber { get; set; }
+    }
 }
