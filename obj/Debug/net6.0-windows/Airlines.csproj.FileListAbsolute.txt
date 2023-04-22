@@ -30,3 +30,5 @@ C:\Users\diett\source\repos\Airlines\obj\Debug\net6.0-windows\Airlines.FlightMan
 C:\Users\diett\source\repos\Airlines\obj\Debug\net6.0-windows\Airlines.AccountHistoryForm.resources
 C:\Users\diett\source\repos\Airlines\obj\Debug\net6.0-windows\Airlines.LoadEngineerForm.resources
 C:\Users\diett\source\repos\Airlines\obj\Debug\net6.0-windows\Airlines.FlightsListForm.resources
+C:\Users\diett\source\repos\Airlines\obj\Debug\net6.0-windows\Airlines.MarketingManagerForm.resources
+C:\Users\diett\source\repos\Airlines\obj\Debug\net6.0-windows\Airlines.AccountantForm.resources

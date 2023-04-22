@@ -53,6 +53,9 @@ namespace Airlines
                 else if (customer.Accountant == true)
                 {
                     //open accountantForm
+                    AccountantForm af = new AccountantForm();
+                    af.ShowDialog();
+                    this.Close();
                 }
                 else if (customer.LoadEngineer == true)
                 {

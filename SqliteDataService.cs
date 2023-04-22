@@ -131,7 +131,7 @@ namespace Airlines
             }
         }
 
-        public void UpdateFlight(FlightModel flight)
+        public void UpdateFlightPathAndTime(FlightModel flight)
         {
             string flightTime = flight.TakeoffTime.ToString();
             using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
@@ -179,7 +179,29 @@ namespace Airlines
             return null;
         }
 
+        public void UpdateFlightPlaneType(int flightID, int planeID)
+        {
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                cnn.Execute($"UPDATE Flights " +
+                            $"SET AirplaneTypeID = {planeID} " +
+                            $"WHERE FlightID = {flightID}");
+            }
+        }
 
+        public List<Ticket> GetAllTickets()//returns the tickets so it knows how many to refund
+        {
+            List<Ticket> allTickets = null;
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                string sqlQuery = $"SELECT * FROM Tickets";
+
+                allTickets = cnn.Query<Ticket>(sqlQuery, new DynamicParameters())?.ToList();
+
+                return allTickets;
+            }
+            return null;
+        }
 
         //Connection string that has a path to the database
         private string LoadConnectionString(string id = "Default")

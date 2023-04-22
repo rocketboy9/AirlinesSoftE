@@ -47,7 +47,7 @@ namespace Airlines
             FlightModel.OriginCity = textBoxOrigin.Text; 
             FlightModel.DestinationCity = textBoxDestination.Text;
 
-            svc.UpdateFlight(FlightModel);
+            svc.UpdateFlightPathAndTime(FlightModel);
             GetFlightandSetup();
         }
 

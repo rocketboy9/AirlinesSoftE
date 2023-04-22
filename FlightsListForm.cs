@@ -20,8 +20,6 @@ namespace Airlines
         bool MarketingManager;
 
 
-
-
         public FlightsListForm(bool flightManager, bool loadEngineer, bool marketingManager)
         {
             InitializeComponent();
@@ -60,19 +58,19 @@ namespace Airlines
                     _selectedFlight = fm;
                     if (FlightManager)
                     {
-                        FlightManagerManifestForm flightManagerManifestForm = new FlightManagerManifestForm(fm);
+                        FlightManagerManifestForm flightManagerManifestForm = new FlightManagerManifestForm(fm);//flight manifest
                         flightManagerManifestForm.ShowDialog();
                     }
                     else if(LoadEngineer)
                     {
-                        LoadEngineerForm loadEngineerForm = new LoadEngineerForm(fm);
+                        LoadEngineerForm loadEngineerForm = new LoadEngineerForm(fm);//load engineer form for changing origin and destination
                         loadEngineerForm.ShowDialog();
                     }
                     else if (MarketingManager)
                     {
-                        //add some code to get to the marketing manager form here 
+                        MarketingManagerForm mm = new MarketingManagerForm(fm);//Marketing manager form for changing the Airplane type
+                        mm.ShowDialog();
                     }
-                    
                 }
             }
         }
