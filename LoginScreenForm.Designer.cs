@@ -82,11 +82,11 @@
             labelAirlines.Anchor = AnchorStyles.Top;
             labelAirlines.AutoSize = true;
             labelAirlines.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            labelAirlines.Location = new Point(161, 21);
+            labelAirlines.Location = new Point(195, 25);
             labelAirlines.Name = "labelAirlines";
-            labelAirlines.Size = new Size(194, 30);
+            labelAirlines.Size = new Size(137, 30);
             labelAirlines.TabIndex = 1;
-            labelAirlines.Text = "Something Airlines";
+            labelAirlines.Text = "3550 Airlines";
             labelAirlines.TextAlign = ContentAlignment.TopCenter;
             // 
             // LoginScreenForm
