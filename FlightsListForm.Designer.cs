@@ -33,7 +33,7 @@
             // 
             // listBoxFlights
             // 
-            listBoxFlights.DisplayMember = "Lane";
+            listBoxFlights.DisplayMember = "FlightDetails";
             listBoxFlights.FormattingEnabled = true;
             listBoxFlights.ItemHeight = 15;
             listBoxFlights.Location = new Point(145, 43);
@@ -43,13 +43,13 @@
             listBoxFlights.ValueMember = "FlightID";
             listBoxFlights.SelectedValueChanged += listBoxFlights_SelectedValueChanged;
             // 
-            // FlightManagerForm
+            // FlightsListForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
             Controls.Add(listBoxFlights);
-            Name = "FlightManagerForm";
+            Name = "FlightsListForm";
             Text = "FlightManagerForm";
             ResumeLayout(false);
         }

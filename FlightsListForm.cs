@@ -28,7 +28,7 @@ namespace Airlines
             FlightManager = flightManager;
             LoadEngineer = loadEngineer;
             MarketingManager = marketingManager;
-            
+
 
             _initialized = true;
         }
@@ -61,7 +61,7 @@ namespace Airlines
                         FlightManagerManifestForm flightManagerManifestForm = new FlightManagerManifestForm(fm);//flight manifest
                         flightManagerManifestForm.ShowDialog();
                     }
-                    else if(LoadEngineer)
+                    else if (LoadEngineer)
                     {
                         LoadEngineerForm loadEngineerForm = new LoadEngineerForm(fm);//load engineer form for changing origin and destination
                         loadEngineerForm.ShowDialog();

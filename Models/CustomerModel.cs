@@ -66,6 +66,7 @@ namespace Airlines.Models
         public string DestinationCity { get; set; }
         public DateTime TakeoffTime { get; set; }
         public string Lane { get; set; }
+        public string FlightDetails => $"ID: {FlightID}, Origin: {OriginCity}   Destination: {DestinationCity}  TakeOff Time: {TakeoffTime}";
     
         public int getDistance()
         {
